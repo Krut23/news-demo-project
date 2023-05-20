@@ -41,7 +41,5 @@ Like.init(
   },
 );
 
-Like.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-Like.belongsTo(News, { foreignKey: 'newsId', as: 'news' });
 
 export default Like;
