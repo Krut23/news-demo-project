@@ -22,13 +22,13 @@ app.put('/users/:userId', authenticateUser, checkAdminRole, editUser);
 app.put('/users/profile', authenticateUser,checkAdminRole,checkEditorRole,checkVisitorRole, editUserProfile);
 
 // News 
-app.post('/news', authenticateUser,upload.fields([{ name: 'images' }, { name: 'videos'}]), createNews);
-app.get('/news',authenticateUser, getNews);
-app.put('/news/:id', authenticateUser, checkEditorRole, upload.fields([{ name: 'images' }, { name: 'videos'}]), updateNews);
-app.delete('/news/:id', authenticateUser, checkEditorRole, deleteNews);
+app.post('/news', authenticateUser,checkAdminRole,checkEditorRole,upload.fields([{ name: 'images' }, { name: 'videos'}]), createNews);
+app.get('/news',authenticateUser,checkEditorRole,checkVisitorRole, getNews);
+app.put('/news/:id', authenticateUser,checkAdminRole, checkEditorRole, upload.fields([{ name: 'images' }, { name: 'videos'}]), updateNews);
+app.delete('/news/:id', authenticateUser,checkAdminRole, checkEditorRole, deleteNews);
 
 // Like 
-app.post('/news/like/:newsId',authenticateUser, likenews);
+app.post('/news/like/:newsId',authenticateUser,checkVisitorRole, likenews);
 
 // Comment 
 app.post('/news/:newsId/comment', authenticateUser,checkVisitorRole, commentNews);
