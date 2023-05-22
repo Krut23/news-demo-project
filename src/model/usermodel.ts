@@ -1,5 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize  from '../database';
+import sequelize from '../database';
+import News from './newsmodel';
+import Like from './likemodel';
+import Comment from './commentmodel';
 
 class User extends Model {
   static findById(id: any) {
@@ -10,7 +13,12 @@ class User extends Model {
   public email!: string;
   public password!: string;
   public role!: 'Admin' | 'Editor' | 'Visitor';
+
+  static associate(models: any) {
+    User.hasMany(models.News, { foreignKey: 'userId', as: 'news' });
+  }
 }
+
 
 User.init(
   {
@@ -45,5 +53,6 @@ User.init(
     modelName: 'User',
   },
 );
+User.hasMany(News, { foreignKey: 'userId', as: 'news' });
 
 export default User;

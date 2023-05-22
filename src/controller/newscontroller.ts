@@ -139,22 +139,37 @@ export const updateNews = async (req: Request, res: Response) => {
 
 export const getNews = async (req: Request, res: Response) => {
   try {
-    const news = await News.findAll();
-    const newsData = [];
+    const { limit = 50, page = 1 } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
 
-    for (const item of news) {
-      const images = await Image.findAll({ where: { newsId: item.id } });
-      const videos = await Video.findAll({ where: { newsId: item.id } });
+    const { count, rows: news } = await News.findAndCountAll({
+      limit: Number(limit),
+      offset,
+      include: [
+        {
+          model: Image,
+          required: false, 
+        },
+        {
+          model: Video,
+          required: false, 
+        },
+      ],
+    });
 
-      newsData.push({ news: item, images, videos });
-    }
-
-    res.status(200).json(newsData);
+    res.status(200).json({
+      page,
+      limit,
+      totalCount: count,
+      totalPages: Math.ceil(count),
+      newsData: news,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 
 
 

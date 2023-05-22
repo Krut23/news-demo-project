@@ -7,6 +7,12 @@ class Comment extends Model {
   public newsId!: number;
   public userId!: number;
   public comment!: string;
+ 
+
+  static associate(models: any) {
+    Comment.belongsTo(models.News, { foreignKey: 'newsId', as: 'news' });
+    Comment.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+  }
 }
 
 Comment.init(
@@ -34,6 +40,5 @@ Comment.init(
     modelName: 'Comment',
   }
 );
-
 
 export default Comment;

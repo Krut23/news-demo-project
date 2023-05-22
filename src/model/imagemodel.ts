@@ -1,10 +1,16 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../database';
+import News from './newsmodel';
+import { BelongsTo } from 'sequelize-typescript';
 
 class Image extends Model {
   public id!: number;
   public url!: string;
   public newsId!: number;
+
+  static associate(models: any) {
+    Image.belongsTo(models.News, { foreignKey: 'newsId', as: 'news' });
+  }
 }
 
 Image.init(
@@ -28,5 +34,4 @@ Image.init(
     tableName: 'images',
   }
 );
-
 export default Image;

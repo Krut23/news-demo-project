@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize  from '../database';
+import sequelize from '../database';
 import User from './usermodel';
 import News from './newsmodel';
 
@@ -7,6 +7,11 @@ class Like extends Model {
   public id!: number;
   public userId!: number;
   public newsId!: number;
+
+  static associate(models: any) {
+    Like.belongsTo(models.News, { foreignKey: 'newsId', as: 'news' });
+    Like.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+  }
 }
 
 Like.init(
@@ -40,6 +45,5 @@ Like.init(
     modelName: 'Like',
   },
 );
-
 
 export default Like;

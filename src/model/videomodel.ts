@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../database';
+import News from './newsmodel';
 
 class Video extends Model {
   static find(arg0: { newsId: any; }) {
@@ -8,6 +9,10 @@ class Video extends Model {
   public id!: number;
   public url!: string;
   public newsId!: number;
+
+  static associate(models: any) {
+    Video.belongsTo(models.News, { foreignKey: 'newsId', as: 'news' });
+  }
 }
 
 Video.init(
@@ -31,5 +36,6 @@ Video.init(
     tableName: 'videos',
   }
 );
+
 
 export default Video;
