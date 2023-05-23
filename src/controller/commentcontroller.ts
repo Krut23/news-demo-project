@@ -35,5 +35,29 @@ export const  getCommentsNews = async (req: Request, res: Response)=> {
   }
   }
 
+  export const deleteComment = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const userId = req.user.id;
+  
+      const comment = await Comment.findByPk(id);
+      if (!comment) {
+        return res.status(404).json({ message: 'Comment not found' });
+      }
+  
+      if (comment.userId === userId || req.user.role === 'Admin') {
+        // Only the comment author or admin can delete the comment
+        await comment.destroy();
+        return res.json({ message: 'Comment deleted successfully' });
+      }
+  
+      res.status(403).json({ message: 'Unauthorized ' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Failed to delete the comment' });
+    }
+  };
+  
+  
 
-export default { commentNews, getCommentsNews };
+export default { commentNews, getCommentsNews,deleteComment };

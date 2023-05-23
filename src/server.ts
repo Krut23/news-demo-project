@@ -2,8 +2,8 @@ import express from 'express';
 import { register,login} from './controller/authcontroller';
 import { createUser, editUser ,editUserProfile} from './controller/usercontoller';
 import  { createNews,updateNews,getNews,deleteNews}  from './controller/newscontroller';
-import likenews from './controller/likecontroller';
-import { commentNews, getCommentsNews } from './controller/commentcontroller';
+import {likenews,disLike} from './controller/likecontroller';
+import { commentNews, getCommentsNews, deleteComment } from './controller/commentcontroller';
 import upload from './controller/multer';
 import { authenticateUser, checkAdminRole,checkEditorRole,checkVisitorRole} from './midleware/auth';
 
@@ -29,10 +29,12 @@ app.delete('/news/:id', authenticateUser,checkAdminRole, checkEditorRole, delete
 
 // Like 
 app.post('/news/like/:newsId',authenticateUser,checkVisitorRole, likenews);
+app.delete('/like/:likeId',authenticateUser,  disLike);
 
 // Comment 
 app.post('/news/:newsId/comment', authenticateUser,checkVisitorRole, commentNews);
 app.get('/news/:newsId/comments',authenticateUser, getCommentsNews);
+app.delete('/news/:id',authenticateUser, deleteComment)
 
 
 app.listen(port, () => {
